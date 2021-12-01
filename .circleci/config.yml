@@ -75,7 +75,7 @@ jobs:
             npm install
             npm run build
       - slack/notify:
-          event: fail
+          event: always
           mentions: '@Ram'
           template: basic_fail_1
                             
@@ -163,9 +163,7 @@ workflows:
   default:
     jobs:
       - test-channel
-      - build-frontend:
-          - slack/notify:  
-              context: slack-secrets
+      - build-frontend
       - build-backend
       - test-frontend:
           requires: [build-frontend]
