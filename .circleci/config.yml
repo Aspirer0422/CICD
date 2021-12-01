@@ -133,7 +133,7 @@ jobs:
       - node/install-packages
       - run:
           command: |
-          npm run deploy
+            npm run deploy
       - slack/notify:
           channel: $SLACK_DEFAULT_CHANNEL
           event: fail
