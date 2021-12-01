@@ -137,9 +137,7 @@ jobs:
       - checkout
       - run:
           command: |
-            sudo npm install -g npm-check-updates
-      - run:
-          command: |
+            npm install
             npm run deploy            
       - slack/notify:
           channel: "https://sample-hqf3860.slack.com/archives/C02PW97J480"
