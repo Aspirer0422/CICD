@@ -19,8 +19,6 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-            aws s3 rm s3://udapeople-abc1234 --recursive
-            aws cloudformation delete-stack --stack-name InitialStack
             aws cloudformation delete-stack --stack-name udapeople-backendstack-<<parameters.workflowid>>
             aws cloudformation delete-stack --stack-name udapeople-frontendstack-<<parameters.workflowid>>
 
@@ -179,7 +177,7 @@ jobs:
               --tags project=your-tag \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
-              
+      - run: yum install -y tar gzip              
       - run:
           name: Add back-end ip to ansible inventory
           command: |
@@ -187,6 +185,7 @@ jobs:
                --filters Name=tag:Application,Values=udapeople\
                --query 'Reservations[*].Instances[*].PublicIpAddress' \
                --output text >> .circleci/ansible/inventory.txt
+               --region us-east-1 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]
             cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
