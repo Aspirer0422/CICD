@@ -9,7 +9,11 @@ commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
-      # Add parameter here   
+      # Add parameter here
+      workflowid:
+        description: unique identifier
+        type: string      
+    
     steps:
       - run:
           name: Destroy environments
@@ -186,6 +190,7 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
+      
       - destroy-environment:
            workflowid: ${CIRCLE_WORKFLOW_ID:0:7} 
             
