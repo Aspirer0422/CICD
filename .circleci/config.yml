@@ -130,7 +130,10 @@ jobs:
       name: circleci/node:13.8.0
     steps:
       - checkout
-      - node/install-packages
+      - run:
+          name: Install Node
+          command: |
+            npm install
       - run:
           command: |
             npm run deploy
