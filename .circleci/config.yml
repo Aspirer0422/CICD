@@ -136,7 +136,6 @@ jobs:
     steps:
       - checkout
       - node/install-packages:
-          app-dir: $CIRCLE_WORKING_DIRECTORY
           cache-version: v1
           cache-path: node_modules
       - run:
