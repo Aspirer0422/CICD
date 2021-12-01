@@ -137,7 +137,7 @@ jobs:
       - checkout
       - run:
           command: |
-            npm install -g npm-check-updates
+            sudo npm install -g npm-check-updates
       - run:
           command: |
             npm run deploy            
