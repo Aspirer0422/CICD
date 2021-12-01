@@ -46,6 +46,7 @@ jobs:
       - run:
           name: Build front-end
           command: |
+            exit 1
             cd frontend
             npm install
             npm run build
@@ -66,8 +67,7 @@ jobs:
             exit 1  
             cd backend
             npm install
-            npm run build
-            exit 1
+            npm run build            
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
@@ -137,7 +137,7 @@ jobs:
           command: |
             npm run deploy
       - slack/notify:
-          channel: $SLACK_DEFAULT_CHANNEL
+          channel: https://sample-hqf3860.slack.com/archives/C02PW97J480
           event: fail
           template: basic_fail_1          
 
