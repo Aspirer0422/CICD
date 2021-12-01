@@ -127,7 +127,7 @@ jobs:
 
   deploy:
     executor:
-      name: node/default
+      name: circleci/node:13.8.0
     steps:
       - checkout
       - node/install-packages
