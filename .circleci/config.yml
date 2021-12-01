@@ -66,6 +66,7 @@ jobs:
       - run:
           name: Back-end build
           command: |
+            echo $CIRCLE_WORKING_DIRECTORY
             exit 1  
             cd backend
             npm install
@@ -134,10 +135,13 @@ jobs:
     executor: node/default
     steps:
       - checkout
-      - node/install-packages
+      - node/install-packages:
+          app-dir: $CIRCLE_WORKING_DIRECTORY
+          cache-version: v1
+          cache-path: node_modules
       - run:
           command: |
-            npm run deploy
+            npm run deploy            
       - slack/notify:
           channel: "https://sample-hqf3860.slack.com/archives/C02PW97J480"
           event: fail
