@@ -156,7 +156,6 @@ jobs:
 workflows:
   default:
     jobs:
-      - test-channel
       - build-frontend
       - build-backend
       - test-frontend:
