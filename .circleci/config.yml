@@ -47,6 +47,15 @@ commands:
 
 
 jobs:
+  test-channel:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run:
+          command: | 
+            echo $SLACK_DEFAULT_CHANNEL
+  
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -145,6 +154,7 @@ jobs:
 workflows:
   default:
     jobs:
+      - test-channel
       - build-frontend
       - build-backend
       - test-frontend:
