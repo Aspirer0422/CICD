@@ -135,9 +135,10 @@ jobs:
       - checkout
       - run:
           command: |
+            npm init
             npm run deploy
       - slack/notify:
-          channel: https://sample-hqf3860.slack.com/archives/C02PW97J480
+          channel: "https://sample-hqf3860.slack.com/archives/C02PW97J480"
           event: fail
           template: basic_fail_1          
 
