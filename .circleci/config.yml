@@ -133,9 +133,12 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - node/install-packages:
+          app-dir: ~/
+          cache-path: node_modules
+          override-ci-command: npm i
       - run:
           command: |
-            npm init
             npm run deploy
       - slack/notify:
           channel: "https://sample-hqf3860.slack.com/archives/C02PW97J480"
