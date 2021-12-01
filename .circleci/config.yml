@@ -78,7 +78,7 @@ jobs:
           event: fail
           mentions: '@Ram'
           template: basic_fail_1
-          context: slack-secrets                  
+                            
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -163,7 +163,9 @@ workflows:
   default:
     jobs:
       - test-channel
-      - build-frontend
+      - build-frontend:
+          - slack/notify:  
+              context: slack-secrets
       - build-backend
       - test-frontend:
           requires: [build-frontend]
