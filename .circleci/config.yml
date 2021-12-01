@@ -1,7 +1,9 @@
 version: 2.1
 
 orbs: 
-  slack: circleci/slack@4.5.0
+  node: 'circleci/node:4.1'
+  slack: circleci/slack@4.1
+  
 
 commands:
   destroy-environment:
@@ -132,10 +134,7 @@ jobs:
     executor: node/default
     steps:
       - checkout
-      - node/install-packages:
-          app-dir: ~/
-          cache-path: node_modules
-          override-ci-command: npm i
+      - node/install-packages
       - run:
           command: |
             npm run deploy
