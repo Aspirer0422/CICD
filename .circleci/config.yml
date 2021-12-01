@@ -133,11 +133,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install Node
-          command: |
-            npm init
-            npm install
-      - run:
           command: |
             npm run deploy
       - slack/notify:
