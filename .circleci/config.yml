@@ -44,6 +44,7 @@ commands:
           event: fail
           mentions: '@Ram'
           template: basic_fail_1
+          context: slack-secrets
 
 
 jobs:
