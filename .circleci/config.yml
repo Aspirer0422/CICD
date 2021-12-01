@@ -137,7 +137,7 @@ jobs:
       - checkout
       - run:
           command: |
-            npm install -g npm
+            sudo npm install -g npm
       - node/install-packages:
           cache-version: v1
           cache-path: node_modules
