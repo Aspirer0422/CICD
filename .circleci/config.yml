@@ -132,13 +132,12 @@ jobs:
             
 
   deploy:
-    executor: circleci/node:13.8.0
+    executor: node/default
     steps:
       - checkout
       - run:
           command: |
-            npm install 
-            sudo npm install -g npm
+            npm install -g npm-check-updates
       - run:
           command: |
             npm run deploy            
