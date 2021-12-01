@@ -170,6 +170,7 @@ workflows:
       - scan-frontend:
           requires: [build-frontend]
       - notify_slack_error:
+          requires: [build-backend]
           context: slack-secrets    
           
          
