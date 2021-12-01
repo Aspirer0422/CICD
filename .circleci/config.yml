@@ -43,7 +43,8 @@ commands:
 
 jobs:
   notify_slack_error:
-    Notif for when something fails
+    docker:
+      - image: 'cimg/base:stable'
     steps:
       - slack/notify:
           event: fail
