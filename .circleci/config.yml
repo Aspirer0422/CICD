@@ -37,17 +37,19 @@ commands:
               exit 1
             fi
   
+  
+          context: slack-secrets
+
+
+jobs:
   notify_slack_error:
-    description: Notif for when something fails
+    Notif for when something fails
     steps:
       - slack/notify:
           event: fail
           mentions: '@Ram'
           template: basic_fail_1
-          context: slack-secrets
 
-
-jobs:
   test-channel:
     docker:
       - image: circleci/node:13.8.0
@@ -71,7 +73,7 @@ jobs:
             cd frontend
             npm install
             npm run build
-      - notify_slack_error            
+                  
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -166,5 +168,7 @@ workflows:
           requires: [build-backend]
       - scan-frontend:
           requires: [build-frontend]
+      - notify_slack_error:
+          context: slack-secrets    
           
          
