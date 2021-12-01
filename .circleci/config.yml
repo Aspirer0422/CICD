@@ -129,8 +129,7 @@ jobs:
             
 
   deploy:
-    docker:
-      - image: circleci/node:13.8.0
+    executor: node/default
     steps:
       - checkout
       - node/install-packages:
