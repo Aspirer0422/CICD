@@ -47,7 +47,7 @@ jobs:
       - image: 'cimg/base:stable'
     steps:
       - slack/notify:
-          event: fail
+          event: always
           mentions: '@Ram'
           template: basic_fail_1
 
@@ -175,7 +175,7 @@ workflows:
           requires: [build-backend]
       - scan-frontend:
           requires: [build-frontend]
-      - notify_slack_error:
-          context: slack-secrets    
+      - notify_slack_error
+           
           
          
