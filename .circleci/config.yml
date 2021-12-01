@@ -51,15 +51,6 @@ jobs:
           mentions: '@Ram'
           template: basic_fail_1
 
-  test-channel:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
-      - run:
-          command: | 
-            echo $SLACK_DEFAULT_CHANNEL
-  
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -70,18 +61,17 @@ jobs:
       - run:
           name: Build front-end
           command: |
-            exit 1
             cd frontend
             npm install
             npm run build
-      - slack/notify:
-          event: always
-          mentions: '@Ram'
-          template: basic_fail_1
-                            
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
+      
+      - slack/notify:
+          event: always
+          mentions: '@Ram'
+          template: basic_fail_1    
 
   build-backend:
     docker:
@@ -94,13 +84,17 @@ jobs:
           name: Back-end build
           command: |
             echo $CIRCLE_WORKING_DIRECTORY
-            exit 1  
             cd backend
             npm install
             npm run build            
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
+      
+      - slack/notify:
+          event: always
+          mentions: '@Ram'
+          template: basic_fail_1
   
   test-frontend:
     docker:
