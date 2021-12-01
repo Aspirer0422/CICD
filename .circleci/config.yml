@@ -126,8 +126,8 @@ jobs:
             npm audit fix --audit-level=critical
 
   deploy:
-    executor:
-      name: circleci/node:13.8.0
+    docker:
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
