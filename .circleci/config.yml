@@ -259,12 +259,12 @@ workflows:
           requires: [build-backend]
       - scan-frontend:
           requires: [build-frontend]
-      #- notify_slack_error:
-      #    context: slack-secrets
-      #- deploy-infrastructure:
-      #    requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-      #- configure-infrastructure:
-      #    requires: [deploy-infrastructure]
+      - notify_slack_error:
+          context: slack-secrets
+      - deploy-infrastructure:
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
       - run-migrations:
           requires: [scan-frontend, scan-backend]
            
