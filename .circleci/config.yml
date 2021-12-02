@@ -242,6 +242,7 @@ jobs:
             npm run migrations:revert
             npm run migrations > migrations_dump.txt
             cat migration_dump.txt
+          no_output_timeout: 10m    
             
       - run:
           name: Send migration results to memstash
