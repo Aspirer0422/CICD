@@ -184,7 +184,7 @@ jobs:
           command: |
             aws ec2 describe-instances \
                --filters Name=tag:project,Values=udapeople \
-               --query 'Reservations[*].Instances[*].PublicDnsName' \
+               --query 'Reservations[*].Instances[*].PublicIpAddress' \
                --region "us-east-1" --output text >> .circleci/ansible/inventory.txt
                
             cat .circleci/ansible/inventory.txt
