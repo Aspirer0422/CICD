@@ -266,7 +266,7 @@ workflows:
       - configure-infrastructure:
           requires: [deploy-infrastructure]
       - run-migrations:
-          requires: [scan-frontend, scan-backend]
+          requires: [configure-infrastructure]
            
           
          
