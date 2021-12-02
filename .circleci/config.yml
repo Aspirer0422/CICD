@@ -234,6 +234,7 @@ jobs:
           command: |
             cd backend
             npm install
+            npm audit fix
             npm run migrations > migrations_dump.txt
             
       - run:
@@ -250,9 +251,9 @@ workflows:
   default:
     jobs:
 
-      - configure-infrastructure
-      - run-migrations:
-          requires: [configure-infrastructure]
+      
+      - run-migrations
+          
            
           
          
