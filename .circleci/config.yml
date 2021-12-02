@@ -175,7 +175,7 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
-              --tags project=your-tag \
+              --tags project=udapeople \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
       - run: yum install -y tar gzip              
@@ -183,6 +183,7 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
             aws ec2 describe-instances \
+               --filters Name=tag:project,Values=udapeople
                --query 'Reservations[*].Instances[*].PublicIpAddress' \
                --region "us-east-1" | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' >> .circleci/ansible/inventory.txt
                
@@ -195,7 +196,31 @@ jobs:
           command: echo
       - destroy-environment:
            workflowid: ${CIRCLE_WORKFLOW_ID:0:7} 
+  
+  configure-infrastructure:
+    docker:
+      docker:
+        - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      # Add ssh keys with fingerprint
+      - add_ssh_keys:
+            fingerprints: ["58:45:86:30:67:18:96:3b:8e:1e:f3:c7:4d:7a:00:6e"]
+      # attach workspace
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible
+            yum install -y tar gzip
             
+      - run:
+          name: Configure server
+          command: |
+            # Your code here
+            exit 1
+      # Here's where you will add some code to rollback on failure               
 
 
 workflows:
