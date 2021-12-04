@@ -26,7 +26,6 @@ commands:
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
-      parameters:
       workflow_id:
          type: string   
     steps:
@@ -297,6 +296,7 @@ jobs:
            workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"     
       - revert-migrations:
            workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"   
+  
   deploy-backend:
     docker:
       - image: python:3.7-alpine3.11
