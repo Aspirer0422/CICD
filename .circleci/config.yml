@@ -250,14 +250,60 @@ jobs:
               curl -H "Content-Type: text/plain" -H "token: aaef7d84-0869-4f4e-8668-8c8fad19568f" --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
             fi
      # Here's where you will add some code to rollback on failure      
-    
+
+  deploy-frontend:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/
+      - restore_cache:
+          keys: [frontend-build]
+
+      - run:
+          name: Install Python
+          command: |
+                  sudo apt-get update
+                  if ! [ -x "$(which python3)" ]; then
+                    sudo apt-get -y install python3
+                  fi
+                  if ! [ -x "$(which pip3)" ]; then
+                    sudo apt-get -y install python3-pip
+                  fi
+      - node/install:
+          install-yarn: true
+      - run: node --version 
+      - run: yum install -y tar gzip
+                  
+
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
+            export BACKEND_IP=$(aws ec2 describe-instances \
+               --filters Name=tag:project,Values=udapeople \
+               --query 'Reservations[*].Instances[*].PublicIpAddress' \
+               --region "us-east-1" --output text)
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+      - run:
+          name: Deploy frontend objects
+          command: |
+            cd frontend
+            npm install
+            npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+      # Here's where you will add some code to rollback on failure        
 
 workflows:
   default:
     jobs:
 
       
-      - run-migrations
+      #- run-migrations
+      - deploy-frontend
           
            
           
