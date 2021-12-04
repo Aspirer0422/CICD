@@ -253,7 +253,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: circleci/node:8.9.1
     steps:
       - checkout
       
@@ -262,11 +262,13 @@ jobs:
       - restore_cache:
           keys: [frontend-build]
 
+      
       - run:
-            name: Install AWSCLI
-            command: |
-              sudo pip3 install awscli --upgrade --user
-              aws --version
+          name: Install PIP
+          command: sudo apt-get install python-pip python-dev
+      - run:
+          name: Install awscli
+          command: sudo pip install awscli        
 
       - run:
           name: Get backend url
