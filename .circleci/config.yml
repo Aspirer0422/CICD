@@ -269,7 +269,9 @@ jobs:
       - run:
           name: Install awscli
           command: sudo pip install awscli        
-
+      - run:
+          name: verify awscli
+          command: aws --version
       - run:
           name: Get backend url
           command: |
