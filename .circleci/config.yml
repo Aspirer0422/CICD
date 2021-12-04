@@ -347,7 +347,7 @@ jobs:
             mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
             mv artifact.tar.gz ~/project/.circleci/ansible/roles/deploy/files/
             cd .circleci/ansible
-            echo "3.86.253.77" >> inventory.txt
+            echo "54.88.149.80" >> inventory.txt
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
