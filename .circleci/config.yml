@@ -262,16 +262,6 @@ jobs:
       - restore_cache:
           keys: [frontend-build]
 
-      - run:
-          name: Install Python
-          command: |
-                  apt-get update
-                  if ! [ -x "$(which python3)" ]; then
-                    apt-get -y install python3
-                  fi
-                  if ! [ -x "$(which pip3)" ]; then
-                    apt-get -y install python3-pip
-                  fi
       - node/install:
           install-yarn: true
       - run: node --version 
