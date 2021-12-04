@@ -1,35 +1,18 @@
 ---
-- name: "Extract apt packages."
-  become: yes
+- name: Extract apt packages
+  become: true
   copy:
     src: artifact.tar.gz
-    dest:  /home/ubuntu/artifact.tar.gz
-    update_cache: yes
+    dest: /home/ubuntu/artifact.tar.gz
+    
 
-- name: "upgrade packages"
-  become: yes
-  apt:
-    upgrade: yes
-
-
-- name: remove dependencies that are no longer required
-  become: yes
-  apt:
-    autoremove: yes
-
-- name: "install dependencies."
-  become: yes
-  apt:
-    name: ["nodejs", "npm"]
-    state: latest
-    update_cache: yes
-
-- name: "install pm2"
-  become: yes
-  npm:
-    name: pm2
-    global: yes
-    production: yes
-    state: present
-
+- name: Start job
+  shell: |
+    cd /home/ubuntu/
+    tar xzvf artifact.tar.gz
+    pwd
+    cd backend
+    npm install
+    pm2 stop default
+    pm2 start npm -- start
 
