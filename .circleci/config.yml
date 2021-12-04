@@ -256,7 +256,7 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
-      - run: pip install tar.gz
+      
       - attach_workspace:
           at: ~/
       - restore_cache:
