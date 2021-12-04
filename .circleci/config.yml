@@ -32,8 +32,8 @@ commands:
           name: Revert migrations
           # Add when this will run
           command: |
-            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = 1
+            SUCCESS=$(curl -H "token:${CIRCLE_WORKFLOW_ID:0:7}" --request GET https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7})
+            echo $SUCCESS
             if(( $SUCCESS==1 )); 
             then
             #  cd ~/project/backend
@@ -247,9 +247,13 @@ jobs:
           command: |
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
-              curl -H "Content-Type: text/plain" -H "token: aaef7d84-0869-4f4e-8668-8c8fad19568f" --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
+              curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
             fi
-     # Here's where you will add some code to rollback on failure      
+     # Here's where you will add some code to rollback on failure
+     - destroy-environment:
+           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"     
+     - revert-migrations:
+           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"         
 
   deploy-frontend:
     docker:
@@ -288,7 +292,10 @@ jobs:
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-b892253 --recursive
       # Here's where you will add some code to rollback on failure        
-
+      - destroy-environment:
+           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"     
+      - revert-migrations:
+           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"   
   deploy-backend:
     docker:
       - image: python:3.7-alpine3.11
@@ -344,13 +351,77 @@ jobs:
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure  
+      - destroy-environment:
+           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"     
+      - revert-migrations:
+           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"   
+   smoke-test:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - run:
+          name: install curl
+          command: apk add --update curl
+
+      - run:
+            name: Install Ansible
+            command: |
+              # Install Ansible
+              apk add --update ansible            
+      - run:
+          name: Install node 
+          command: |
+            apk add --update nodejs           
+      - run:
+          name: Install npm
+          command: |
+            apk add --update npm
+      - run:
+          name: Install aws cli
+          command: |
+            pip install awscli   
+
+      - run:
+          name: Get backend url
+          command: |
+              # Fetch and prepare the BACKEND_IP env var
+              export API_URL="http://${BACKEND_IP}:3030"
+              echo "${API_URL}"
+      - run:
+          name: Backend smoke test.
+          command: |
+            if curl "${API_URL}/api/status" | grep "ok"
+            then
+                return 0
+            else
+                return 1
+            fi
+      - run:
+          name: Frontend smoke test.
+          command: |
+             URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
+            echo ${URL} 
+            if curl -s ${URL} | grep "Welcome"
+            then
+                # Change this to 0 after the job fails
+              return 0
+            else
+              return 1
+            fi
+      # Here's where you will add some code to rollback on failure  
+      - destroy-environment:
+           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"     
+      - revert-migrations:
+           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"   
+
 workflows:
   default:
     jobs:
 
       
       #- run-migrations
-      - deploy-backend
+      - smoke-test
           
            
           
