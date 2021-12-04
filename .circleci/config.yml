@@ -9,8 +9,8 @@ commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
-      # Add parameter here
-      workflowid:
+      
+      workflow_id:
         description: unique identifier
         type: string      
     
@@ -195,7 +195,7 @@ jobs:
       - run:
           command: echo
       - destroy-environment:
-           workflowid: ${CIRCLE_WORKFLOW_ID:0:7} 
+           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
   
   configure-infrastructure:
     docker:
