@@ -420,7 +420,9 @@ workflows:
 
       
       #- run-migrations
-      - smoke-test
+      - deploy-backend
+      - smoke-test:
+          requires: [deploy-backend]
           
            
           
