@@ -256,6 +256,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - run: yum install -y tar gzip
       - attach_workspace:
           at: ~/
       - restore_cache:
@@ -274,7 +275,7 @@ jobs:
       - node/install:
           install-yarn: true
       - run: node --version 
-      - run: yum install -y tar gzip
+      
                   
 
       - run:
