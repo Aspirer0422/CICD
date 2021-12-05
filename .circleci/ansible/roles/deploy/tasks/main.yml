@@ -39,13 +39,13 @@
   become: true
   command: npm run build
   args:
-    chdir: /root/backend
+    chdir: /home/ubuntu/backend
 
 - name: Start server
   become: true
   command: pm2 start npm -- run start
   
   args:
-    chdir: /root/backend/dist  
+    chdir: /home/ubuntu/backend/dist  
     
 
