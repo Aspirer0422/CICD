@@ -1,15 +1,19 @@
 ---
+- name: "upgrade packages."
+  become: true
+  apt:
+    upgrade: "yes"
+
 - name: Extract apt packages
   become: true
   copy:
     src: artifact.tar.gz
-    dest: /home/ubuntu/artifact.tar.gz
+    dest: /home/ubuntu/backend/artifact.tar.gz
     
 - name: "install dependencies."
   become: yes
   apt:
     name: ["nodejs", "npm"]
-    state: latest
     update_cache: yes
 
 - name: "install pm2"
@@ -20,13 +24,23 @@
     production: yes
     state: present
 
-- name: Start job
+- name: "install npm packages"
   become: true
-  shell: |
-    cd /home/ubuntu/
-    sudo tar xzvf artifact.tar.gz
-    pwd
-    cd backend
-    pm2 stop default
-    pm2 start npm -- start
+  command: npm install
+  args:
+    chdir: /home/ubuntu/backend    
+
+- name: "compile npm packages"
+  become: true
+  command: npm run build
+  args:
+    chdir: /root/backend
+
+- name: Start server
+  become: true
+  command: pm2 start npm -- run start
+  
+  args:
+    chdir: /root/backend/dist  
+    
 
