@@ -4,10 +4,10 @@
   apt:
     upgrade: "yes"
 
-- name: ansible create directory 
-    file:
-      path: /home/ubuntu/backend
-      state: directory
+- name: "install npm packages"
+  become: true
+  command: mkdir /home/ubuntu/backend
+      
 
 - name: Extract apt packages
   become: true
