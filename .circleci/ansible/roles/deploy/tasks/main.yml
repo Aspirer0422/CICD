@@ -24,7 +24,7 @@
   become: true
   shell: |
     cd /home/ubuntu/
-    tar xzvf artifact.tar.gz
+    sudo tar xzvf artifact.tar.gz
     pwd
     cd backend
     pm2 stop default
