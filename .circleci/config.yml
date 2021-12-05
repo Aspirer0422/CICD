@@ -346,7 +346,6 @@ jobs:
             mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
             mv artifact.tar.gz ~/project/.circleci/ansible/roles/deploy/files/
             cd .circleci/ansible
-            echo "52.91.78.153" >> inventory.txt
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
@@ -411,6 +410,12 @@ jobs:
             else
               return 1
             fi
+
+      - destroy-environment:
+           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"     
+      - revert-migrations:
+           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+           
 workflows:
   default:
     jobs:
