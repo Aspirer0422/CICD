@@ -4,6 +4,11 @@
   apt:
     upgrade: "yes"
 
+- name: ansible create directory 
+    file:
+      path: /home/ubuntu/backend
+      state: directory
+
 - name: Extract apt packages
   become: true
   copy:
