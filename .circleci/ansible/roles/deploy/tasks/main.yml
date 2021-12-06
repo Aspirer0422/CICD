@@ -6,20 +6,14 @@
 
 - name: Creates directory
   file:
-    path: /home/ubuntu/backend
+    path: /home/ubuntu/dist
     state: directory
       
-
-- name: Extract apt packages
-  become: true
-  copy:
-    src: artifact.tar.gz
-    dest: /home/ubuntu/backend/artifact.tar.gz
-    
 - name: "install dependencies."
   become: yes
   apt:
     name: ["nodejs", "npm"]
+    state: latest
     update_cache: yes
 
 - name: "install pm2"
@@ -30,22 +24,21 @@
     production: yes
     state: present
 
-- name: "install npm packages"
+- name: Extract apt packages
   become: true
-  command: npm install
-  args:
-    chdir: /home/ubuntu/backend    
+  copy:
+    src: /root/project/backend/dist.tar.gz
+    dest: /home/ubuntu
 
-- name: "compile npm packages"
-  become: true
-  command: npm run build
-  args:
-    chdir: /home/ubuntu/backend
+- name: Extract backend and start node server
+  shell: |
+    cd /home/ubuntu
+    tar -xf dist.tar.gz
+    rm -rf dist.tar.gz
+    cd dist
+    npm i
+    pm2 start main.js --update-env
 
-- name: Start server
-  become: true
-  command: pm2 start npm -- run start
-  args:
-    chdir: /home/ubuntu/backend/dist  
+
     
 
