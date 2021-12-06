@@ -342,23 +342,18 @@ jobs:
           name: Build backend app
           command: |
             cd backend
-            npm install -g npm@latest
             npm i
             npm run build
-            cp package* ./dist
-            cd dist
-            npm i
-            cd ..
-            tar -czf dist.tar.gz dist
-
-            
-      - run:
-          name: Deploy backend
-          working_directory: ./.circleci/ansible
-          command: |
+            cd ..   
+            tar -C backend -czvf artifact.tar.gz .
+            pwd
+            mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
+            mv artifact.tar.gz ~/project/.circleci/ansible/roles/deploy/files/
+            cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
+            
       
       - destroy-environment:
            workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"     
