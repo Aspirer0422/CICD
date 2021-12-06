@@ -50,6 +50,7 @@ commands:
 
 
 jobs:
+
   notify_slack_error:
     docker:
       - image: 'cimg/base:stable'
@@ -504,7 +505,9 @@ workflows:
       - cloudfront-update:
           requires: [smoke-test]
       - cleanup:
-          requires: [cloudfront-update]   
+          requires: [cloudfront-update]  
+      - notify_slack_error:
+          requires: [cleanup]
            
           
          
