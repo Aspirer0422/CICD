@@ -12,6 +12,7 @@
     ls -ltr
 
 - name: Start job   
+  shell: |
     pwd
     cd /home/ubuntu/backend
     npm install
