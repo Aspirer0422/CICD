@@ -354,8 +354,8 @@ jobs:
             
       - run:
           name: Deploy backend
+          working_directory: ./.circleci/ansible
           command: |
-            cd .circleci/ansible/
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
@@ -402,6 +402,7 @@ jobs:
               echo "${API_URL}"
       - run:
           name: Backend smoke test.
+          working_directory: ./backend
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances --filters Name=tag:project,Values=udapeople  --query 'Reservations[*].Instances[*].PublicIpAddress'  --region "us-east-1" --output text)
             export API_URL="http://${BACKEND_IP}:3030"
@@ -414,6 +415,7 @@ jobs:
             fi
       - run:
           name: Frontend smoke test.
+          working_directory: ./backend
           command: |
             URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
             echo ${URL} 
@@ -424,10 +426,10 @@ jobs:
               return 1
             fi
       
-      - destroy-environment:
-           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"     
-      - revert-migrations:
-           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"   
+      #- destroy-environment:
+           #workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"     
+      #- revert-migrations:
+           #workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"   
       
 
 workflows:
