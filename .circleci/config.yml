@@ -478,7 +478,7 @@ jobs:
           command: |
           
             OLD_WORKFLOWID=$(curl -H "token:${CIRCLE_WORKFLOW_ID:0:7}" --request GET https://api.memstash.io/values/workflowid)
-            export OLD_WORKFLOW_ID="udapeople-$OLD_WORKFLOWID"
+            export OLD_WORKFLOW_ID="mybucket-$OLD_WORKFLOWID"
             echo Old Workflow Id: "${OLD_WORKFLOW_ID}"
             CurrentWorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}"
             echo "current workflow ${CurrentWorkflowID}"
@@ -487,7 +487,7 @@ jobs:
             then
               aws s3 rm s3://${OLD_WORKFLOW_ID}/ --recursive
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OLD_WORKFLOWID}"
-              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OLD_WORKFLOWID}"
+              aws cloudformation delete-stack --stack-name "mybucket-${OLD_WORKFLOWID}"
             fi                    
 
    
