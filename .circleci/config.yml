@@ -285,7 +285,8 @@ jobs:
             export BACKEND_IP=$(aws ec2 describe-instances --filters Name=tag:project,Values=udapeople  --query 'Reservations[*].Instances[*].PublicIpAddress'  --region "us-east-1" --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-            
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            cat frontend/.env
             
       - run:
           name: Deploy frontend objects
@@ -480,7 +481,7 @@ jobs:
             echo Old Workflow Id unq: "${OLD_WORKFLOWID}"
             if [[ "${CurrentWorkflowID}" != "${OLD_WORKFLOW_ID}" ]]
             then
-              aws s3 rm s3://${OLD_WORKFLOWID}/ --recursive
+              aws s3 rm s3://${OLD_WORKFLOW_ID}/ --recursive
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OLD_WORKFLOWID}"
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OLD_WORKFLOWID}"
             fi                    
