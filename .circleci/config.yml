@@ -517,8 +517,7 @@ workflows:
           requires: [smoke-test]
       - cleanup:
           requires: [cloudfront-update]  
-      - notify_slack_error:
-          requires: [cleanup]
+      
            
           
          
